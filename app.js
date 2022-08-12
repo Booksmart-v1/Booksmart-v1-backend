@@ -4,23 +4,22 @@ let exp = require("express");
 let express = require("./configs/express");
 const mongoose = require("mongoose");
 
-let config = require("./configs/configs");
+const config = require("./configs/configs");
 
-mongoose.connect(config.mongodb.url, config.mongodb.mongoOptions).then(
-  async () => {
-    var collections = mongoose.connections[0].collections;
-    names = [];
-    Object.keys(collections).forEach(function (k) {
-      names.push(k);
-    });
-    global.collections = names;
-    console.log(names);
-    console.log("Mongo Connected at ", config.mongodb.url);
-  },
-  async (err) => {
-    console.log(err);
-  }
-);
+mongoose
+  .connect(
+    "mongodb://user1:myyKK1HlvKedXxjN@booksmart-shard-00-00.zjufe.mongodb.net:27017,booksmart-shard-00-01.zjufe.mongodb.net:27017,booksmart-shard-00-02.zjufe.mongodb.net:27017/booksmart?replicaSet=atlas-g9eyff-shard-0&ssl=true&authSource=admin",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    console.log(`Mongodb connected on port ${config.mongodb.port}`);
+  })
+  .catch((err) => {
+    console.error(`Error connecting to the database. n${err}`);
+  });
 
 const httpsLocalhost = require("https-localhost")();
 const certs = httpsLocalhost.getCerts();
