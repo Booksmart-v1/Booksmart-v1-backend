@@ -20,12 +20,12 @@ const bookAdsSchema = new schema({
   bookAuthor: { type: String, required: true },
   bookDescription: { type: String, required: false },
   bookCondition: { type: String, required: true },
-  //sold: { type: Boolean, required: true },
+  sold: { type: Boolean, required: true },
 
   tags: [
     {
       type: String,
-      required: true,
+      required: false,
     },
   ],
   createdAt: { type: Date, default: Date.now },

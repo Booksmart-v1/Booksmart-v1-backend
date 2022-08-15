@@ -24,6 +24,7 @@ class BookAdsController extends Controller {
         tags,
         sellerAddress,
         sellerPincode,
+        sold,
       } = this.req.body;
       if (
         bookId === undefined ||
@@ -35,7 +36,8 @@ class BookAdsController extends Controller {
         bookCondition === undefined ||
         tags === undefined ||
         sellerAddress === undefined ||
-        sellerPincode === undefined
+        sellerPincode === undefined ||
+        sold === undefined
       ) {
         return this.res.status(400).json({
           success: false,
@@ -63,6 +65,7 @@ class BookAdsController extends Controller {
           bookCondition: savedBookAd.bookCondition,
           tags: savedBookAd.tags,
           sellerAddress: savedBookAd.sellerAddress,
+          sold: savedBookAd.sold,
         },
       });
     } catch (error) {

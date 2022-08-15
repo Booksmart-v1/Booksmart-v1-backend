@@ -1,9 +1,7 @@
 require("dotenv").config();
-
 let exp = require("express");
 let express = require("./configs/express");
 const mongoose = require("mongoose");
-
 const config = require("./configs/configs");
 
 mongoose
