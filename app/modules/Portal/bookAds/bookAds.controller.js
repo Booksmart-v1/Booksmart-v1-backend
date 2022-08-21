@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
-const Controller = require("../../Base/Controller");
-const FrequentUtility = require("../../../services/Frequent");
+const mongoose = require('mongoose');
+const Controller = require('../../Base/Controller');
+const FrequentUtility = require('../../../services/Frequent');
 const frequentUtility = new FrequentUtility();
-const bookAd = mongoose.model("bookAds");
+const bookAd = mongoose.model('bookAds');
 // const StreamChat = require("stream-chat").StreamChat;
-const e = require("connect-timeout");
+const e = require('connect-timeout');
 
 class BookAdsController extends Controller {
   async addBookAds() {
@@ -39,17 +39,19 @@ class BookAdsController extends Controller {
         sellerPincode === undefined ||
         sold === undefined
       ) {
+        console.log(bookId);
         return this.res.status(400).json({
           success: false,
-          message: "Please fill all the fields",
+          message: 'Please fill all the fields',
         });
       }
       if (sellerPincode.length !== 6) {
         return this.res.status(400).json({
           success: false,
-          message: "Please enter valid pincode",
+          message: 'Please enter valid pincode',
         });
       }
+      console.log(bookId);
       const candidate = new bookAd({
         ...newBookAds,
       });
@@ -75,18 +77,18 @@ class BookAdsController extends Controller {
 
   async getBookAds() {
     try {
-      let { limit, userId } = this.req.body;
+      let { limit, userId } = this.req.query;
       if (limit === undefined || userId === undefined) {
         return this.res.status(400).json({
           success: false,
-          message: "Please fill all the fields",
+          message: 'Please fill all the fields',
         });
       }
       //   let bookAds = await bookAd.find({});
       let bookAdLimits = await bookAd.find({}).limit(limit);
       return this.res.status(200).json({
         success: true,
-        message: "Book Ads fetched successfully",
+        message: 'Book Ads fetched successfully',
         data: bookAdLimits,
       });
     } catch (error) {
