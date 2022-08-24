@@ -10,6 +10,9 @@ module.exports = function (app, express) {
   router.get("/getBookAds", (req, res) => {
     return new BookAdsController().boot(req, res).getBookAds();
   });
+  router.get("/getMyBookAds", (req, res) => {
+    return new BookAdsController().boot(req, res).getMyBookAds();
+  });
 
   //   router.post("/loginUser", (req, res) => {
   //     return new UserController().boot(req, res).loginUser();

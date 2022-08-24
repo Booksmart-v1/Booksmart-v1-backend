@@ -1,13 +1,13 @@
-let fetch = import('node-fetch');
-const mongoose = require('mongoose');
-const Controller = require('../../Base/Controller');
-const FrequentUtility = require('../../../services/Frequent');
+let fetch = import("node-fetch");
+const mongoose = require("mongoose");
+const Controller = require("../../Base/Controller");
+const FrequentUtility = require("../../../services/Frequent");
 const frequentUtility = new FrequentUtility();
-const books = mongoose.model('book');
+const books = mongoose.model("book");
 // const StreamChat = require("stream-chat").StreamChat;
-const e = require('connect-timeout');
-require('dotenv').config();
-const axios = require('axios');
+const e = require("connect-timeout");
+require("dotenv").config();
+const axios = require("axios");
 
 class BookController extends Controller {
   async addBooks() {
@@ -35,14 +35,14 @@ class BookController extends Controller {
         console.log(newBooks);
         return this.res.status(400).json({
           success: false,
-          message: 'Please fill all the fields',
+          message: "Please fill all the fields",
         });
       }
       if (ISBN.length !== 13 && ISBN.length !== 10) {
         console.log(ISBN.length);
         return this.res.status(400).json({
           success: false,
-          message: 'Please enter valid ISBN',
+          message: "Please enter valid ISBN",
         });
       }
       const candidate = new books({
@@ -70,7 +70,7 @@ class BookController extends Controller {
       console.log(error);
       return this.res.status(400).json({
         success: false,
-        message: 'Please fill all the fields',
+        message: "Please fill all the fields",
       });
     }
   }
@@ -83,7 +83,7 @@ class BookController extends Controller {
         console.log(ISBN);
         return this.res.status(400).json({
           success: false,
-          message: 'Please fill all the fields',
+          message: "Please fill all the fields",
         });
       }
       if (ISBN === undefined) {
@@ -91,7 +91,7 @@ class BookController extends Controller {
         if (!book) {
           return this.res.status(400).json({
             success: false,
-            message: 'Book not found',
+            message: "Book not found",
           });
         }
         return this.res.status(200).json({
@@ -112,7 +112,7 @@ class BookController extends Controller {
       if (ISBN.length !== 13 && ISBN.length !== 10) {
         return this.res.status(400).json({
           success: false,
-          message: 'Please enter valid ISBN',
+          message: "Please enter valid ISBN",
         });
       }
       const book = await books.findOne({ ISBN });
@@ -154,12 +154,27 @@ class BookController extends Controller {
       console.log(error);
       return this.res.status(400).json({
         success: false,
-        message: 'Please fill all the fields',
+        message: "Please fill all the fields",
       });
     }
   }
 
-  async getBooks() {}
+  // async getBooks() {
+  //   try {
+  //     const books = await books.find();
+  //     return this.res.status(200).json({
+  //       success: true,
+  //       message: `Books found successfully`,
+  //       data: books,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     return this.res.status(400).json({
+  //       success: false,
+  //       message: "Please fill all the fields",
+  //     });
+  //   }
+  // }
 }
 
 module.exports = BookController;
