@@ -7,7 +7,7 @@ const bookAds = mongoose.model("bookAds");
 const e = require("connect-timeout");
 
 class NotificationsController extends Controller {
-  async getUsernotifs() {
+  async getUserNotifs() {
     try {
       let { userId } = this.req.query;
       if (userId === "" || userId === undefined) {
