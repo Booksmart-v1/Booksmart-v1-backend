@@ -34,7 +34,8 @@ class NotificationsController extends Controller {
   }
   async sendNotif() {
     try {
-      let { userId, type, userName, receiverId, bookAdId } = this.req.body;
+      let { userId, type, userName, receiverId, bookAdId, notifId } =
+        this.req.body;
       if (
         userId === "" ||
         userId === undefined ||
@@ -79,6 +80,12 @@ class NotificationsController extends Controller {
           message: "Wrong type of notification",
         });
       }
+      if (notifId === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Please provide correspoding Notification Id.",
+        });
+      }
       const newNotif = new notifs({
         senderId: userId,
         type: type,
@@ -91,6 +98,8 @@ class NotificationsController extends Controller {
         isRead: false,
       });
 
+      //IF TYPE IS ACCEPT CREATE NEW CHAT DOC IN MONGODB
+      const a = await notifs.deleteOne({ _id: notifId });
       const saveNotif = await newNotif.save();
       return this.res.status(200).json({
         success: true,
@@ -108,7 +117,46 @@ class NotificationsController extends Controller {
 
   async broadcastNotif() {}
 
-  async readNotif() {}
+  async readNotif() {
+    try {
+      let { id } = this.req.body;
+      if (id === "") {
+        return this.res.status(400).json({
+          success: false,
+          message: "Please fill all the fields",
+        });
+      }
+      let readNotifications = await notifs.find({
+        _id: id,
+      });
+      console.log(readNotifications);
+      if (
+        readNotifications[0].type === "accept" ||
+        readNotifications[0].type === "reject"
+      ) {
+        console.log(readNotifications);
+        const a = await notifs.deleteOne(readNotifications[0]);
+      } else {
+        const updateDoc = {
+          $set: {
+            isRead: true,
+          },
+        };
+        const result = await notifs.updateOne({ _id: id }, updateDoc);
+      }
+      return this.res.status(200).json({
+        success: true,
+        message: `The notification has been read.`,
+        data: readNotifications,
+      });
+    } catch (err) {
+      console.log(e);
+      return this.res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+  }
 }
 
 module.exports = NotificationsController;

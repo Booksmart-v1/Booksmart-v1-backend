@@ -16,6 +16,9 @@ module.exports = function (app, express) {
   router.post("/broadcastNotif", (req, res) => {
     return new NotificationsController().boot(req, res).broadcastNotif();
   });
+  router.post("/readNotif", (req, res) => {
+    return new NotificationsController().boot(req, res).readNotif();
+  });
 
   app.use(config, router);
 };

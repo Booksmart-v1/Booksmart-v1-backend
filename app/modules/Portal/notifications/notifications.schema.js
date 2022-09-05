@@ -17,5 +17,6 @@ const notifSchema = new schema({
   bookAdId: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  isRead: { type: Boolean, required: true },
 });
 mongoose.model("notifs", notifSchema, "notifs");
