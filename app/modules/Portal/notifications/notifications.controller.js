@@ -86,6 +86,9 @@ class NotificationsController extends Controller {
           message: "Please provide correspoding Notification Id.",
         });
       }
+      let bookAd = await bookAds.find({
+        _id: bookAdId,
+      });
       const newNotif = new notifs({
         senderId: userId,
         type: type,
@@ -93,8 +96,8 @@ class NotificationsController extends Controller {
         receiverId: receiverId,
         message:
           type === "accept"
-            ? `${userName} has accepted your request.`
-            : `${userName} has rejected your request.`,
+            ? `${userName} has accepted your request to buy the book ${bookAd[0].bookName}.`
+            : `${userName} has rejected your request to buy the book ${bookAd[0].bookName}.`,
         isRead: false,
       });
 
