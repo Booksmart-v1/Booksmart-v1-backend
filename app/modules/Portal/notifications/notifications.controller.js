@@ -55,16 +55,25 @@ class NotificationsController extends Controller {
             message: "Please provide correspoding book ad Id.",
           });
         }
-        let bookAd = await bookAds.find({
+        let bookAd = await bookAds.findOne({
           _id: bookAdId,
         });
+        let buyers = bookAd.interestedBuyers;
+        buyers.push(userId);
+
+        await bookAds.updateOne(
+          {
+            _id: bookAdId,
+          },
+          { $set: { interestedBuyers: buyers } }
+        );
         const newNotif = new notifs({
           senderId: userId,
           type: type,
           senderName: userName,
           receiverId: receiverId,
           bookAdId: bookAdId,
-          message: `${userName} is interested in buying your book: ${bookAd[0].bookName} `,
+          message: `${userName} is interested in buying your book: ${bookAd.bookName} `,
           isRead: false,
         });
         const saveNotif = await newNotif.save();
@@ -86,9 +95,9 @@ class NotificationsController extends Controller {
           message: "Please provide correspoding Notification Id.",
         });
       }
-      let bookAd = await bookAds.find({
-        _id: bookAdId,
-      });
+      // let bookAd = await bookAds.find({
+      //   _id: bookAdId,
+      // });
       const newNotif = new notifs({
         senderId: userId,
         type: type,
@@ -96,13 +105,13 @@ class NotificationsController extends Controller {
         receiverId: receiverId,
         message:
           type === "accept"
-            ? `${userName} has accepted your request to buy the book ${bookAd[0].bookName}.`
-            : `${userName} has rejected your request to buy the book ${bookAd[0].bookName}.`,
+            ? `${userName} has accepted your request to buy the book.`
+            : `${userName} has rejected your request to buy the book.`,
         isRead: false,
       });
 
       //IF TYPE IS ACCEPT CREATE NEW CHAT DOC IN MONGODB
-      const a = await notifs.deleteOne({ _id: notifId });
+      // const a = await notifs.deleteOne({ _id: notifId });
       const saveNotif = await newNotif.save();
       return this.res.status(200).json({
         success: true,
