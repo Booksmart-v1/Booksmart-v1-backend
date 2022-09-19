@@ -129,6 +129,56 @@ class NotificationsController extends Controller {
 
   async broadcastNotif() {}
 
+  async removeNotif() {
+    try {
+      let { notifId } = this.req.body;
+      if (notifId === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Please fill all the fields",
+        });
+      }
+      const a = await notifs.deleteOne({ _id: notifId });
+      return this.res.status(200).json({
+        success: true,
+        message: `Notification Deleted Successfully`,
+        data: a,
+      });
+    } catch (err) {
+      console.log(e);
+      return this.res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+  }
+  async removeInterestNotification() {
+    try {
+      let { bookAdId, userId } = this.req.body;
+      if (bookAdId === undefined || userId === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Please fill all the fields",
+        });
+      }
+      const a = await notifs.deleteMany({
+        type: "interest",
+        senderId: userId,
+        bookAdId: bookAdId,
+      });
+      return this.res.status(200).json({
+        success: true,
+        message: `Notification Retracted Successfully`,
+        data: a,
+      });
+    } catch (err) {
+      console.log(e);
+      return this.res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+  }
   async readNotif() {
     try {
       let { id } = this.req.body;
