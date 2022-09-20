@@ -19,6 +19,14 @@ module.exports = function (app, express) {
   router.post("/readNotif", (req, res) => {
     return new NotificationsController().boot(req, res).readNotif();
   });
+  router.post("/removeNotif", (req, res) => {
+    return new NotificationsController().boot(req, res).removeNotif();
+  });
+  router.post("/removeInterestNotification", (req, res) => {
+    return new NotificationsController()
+      .boot(req, res)
+      .removeInterestNotification();
+  });
 
   app.use(config, router);
 };
