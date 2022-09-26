@@ -1,4 +1,3 @@
-const UserController = require("./user.controller");
 const wishlistController = require("./wishlist.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
 module.exports = function (app, express) {
