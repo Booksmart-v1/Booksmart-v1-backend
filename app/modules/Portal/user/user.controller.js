@@ -3,6 +3,7 @@ const Controller = require("../../Base/Controller");
 const FrequentUtility = require("../../../services/Frequent");
 const frequentUtility = new FrequentUtility();
 const user = mongoose.model("user");
+const wishlist = mongoose.model("wishlist");
 const StreamChat = require("stream-chat").StreamChat;
 const { generateOTP, fast2sms } = require("../../../../utils/otp.util");
 const e = require("connect-timeout");
@@ -11,6 +12,7 @@ class UsersController extends Controller {
   async addUser() {
     try {
       let newCandidate = this.req.body;
+
       let { mobile, name } = this.req.body;
 
       // check duplicate phone Number
@@ -30,6 +32,11 @@ class UsersController extends Controller {
         ...newCandidate,
       });
       const user1 = await candidate.save();
+      const newWishlist = new wishlist({
+        userId: user1._id,
+        bookIds: [],
+      });
+      const wl = await newWishlist.save();
       // generate otp
       const otp = generateOTP(6);
       // save otp to user collection
@@ -46,7 +53,7 @@ class UsersController extends Controller {
       let text = user1.mobile.toString();
       console.log(text.length);
       if (text.length === 10) {
-        return this.res.status(200).json({ 
+        return this.res.status(200).json({
           success: true,
           message: `OTP sent to mobile number <b>${mobile}</b>`,
           data: {
