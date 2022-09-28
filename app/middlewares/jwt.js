@@ -10,7 +10,7 @@ export const encode = async (req, res, next) => {
     const user = await UserModel.getUserById(userId);
     const payload = {
       userId: user._id,
-      userType: user.type,
+      // userType: user.type,
     };
     const authToken = jwt.sign(payload, SECRET_KEY);
     console.log("Auth", authToken);

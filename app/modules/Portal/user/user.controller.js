@@ -41,6 +41,7 @@ class UsersController extends Controller {
       const otp = generateOTP(6);
       // save otp to user collection
       user1.phoneOtp = otp;
+      console.log(otp);
       user1.isAccountVerified = false;
       await user1.save();
 

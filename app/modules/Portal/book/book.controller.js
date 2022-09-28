@@ -159,22 +159,22 @@ class BookController extends Controller {
     }
   }
 
-  // async getBooks() {
-  //   try {
-  //     const books = await books.find();
-  //     return this.res.status(200).json({
-  //       success: true,
-  //       message: `Books found successfully`,
-  //       data: books,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     return this.res.status(400).json({
-  //       success: false,
-  //       message: "Please fill all the fields",
-  //     });
-  //   }
-  // }
+  async getBooks() {
+    try {
+      const a = await books.find({});
+      return this.res.status(200).json({
+        success: true,
+        message: `Books found successfully`,
+        data: a,
+      });
+    } catch (error) {
+      console.log(error);
+      return this.res.status(400).json({
+        success: false,
+        message: "Please fill all the fields",
+      });
+    }
+  }
 }
 
 module.exports = BookController;
