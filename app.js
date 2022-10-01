@@ -1,8 +1,13 @@
 require("dotenv").config();
 let exp = require("express");
+const cors = require('cors');
+// const expressFileUpload = require("express-fileupload");
+
 let express = require("./configs/express");
 const mongoose = require("mongoose");
 const config = require("./configs/configs");
+const multer = require('multer');
+const { GridFsStorage } = require('multer-gridfs-storage');
 
 mongoose
   .connect(
@@ -19,11 +24,23 @@ mongoose
     console.error(`Error connecting to the database. n${err}`);
   });
 
+
+let bucket;
+mongoose.connection.on('connected', () => {
+  var db = mongoose.connections[0].db;
+  bucket = new mongoose.mongo.GridFSBucket(db, {
+    bucketName: 'bookImg',
+  });
+  console.log(bucket);
+});
+
 const httpsLocalhost = require("https-localhost")();
 const certs = httpsLocalhost.getCerts();
 const app = express();
 const server = require("http").Server(certs, app);
 require("./app/modules/Portal/socket/socket")(server);
+
+app.use(cors(), express.json());
 
 app.get("/", function (req, res, next) {
   res.send("Welcome to Booksmart !");
