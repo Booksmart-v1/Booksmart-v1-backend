@@ -161,11 +161,28 @@ class NotificationsController extends Controller {
           message: "Please fill all the fields",
         });
       }
+      let bookAd = await bookAds.findOne({
+        _id: bookAdId,
+      });
+      let buyers = bookAd.interestedBuyers;
+      console.log(buyers);
+      var filtered = buyers.filter(function (value, index, arr) {
+        return value !== userId;
+      });
+      console.log(filtered);
+      await bookAds.updateOne(
+        {
+          _id: bookAdId,
+        },
+        { $set: { interestedBuyers: filtered } }
+      );
+
       const a = await notifs.deleteMany({
         type: "interest",
         senderId: userId,
         bookAdId: bookAdId,
       });
+
       return this.res.status(200).json({
         success: true,
         message: `Notification Retracted Successfully`,

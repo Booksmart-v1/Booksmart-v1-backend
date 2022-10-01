@@ -21,6 +21,7 @@ const bookAdsSchema = new schema({
   bookDescription: { type: String, required: false },
   bookCondition: { type: String, required: true },
   sold: { type: Boolean, required: true },
+  isLiked: { type: Boolean, required: true },
 
   tags: [
     {
