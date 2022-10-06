@@ -14,6 +14,10 @@ module.exports = function (app, express) {
     return new BookAdsController().boot(req, res).getMyBookAds();
   });
 
+  // router.post("/getImageUrl", (req, res) => {
+  //   return new BookAdsController().boot(req, res).uploadImageS3();
+  // });
+
   //   router.post("/loginUser", (req, res) => {
   //     return new UserController().boot(req, res).loginUser();
   //   });

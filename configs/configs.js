@@ -1,13 +1,16 @@
-require("dotenv").config();
+require('dotenv').config();
 
 module.exports = {
+  url: 'mongodb://localhost:27017/',
+  database: 'booksmart',
+  imgBucket: 'bookImg',
   mongodb: {
     //Database Configuration
     port: process.env.DB_PORT || 27017,
     dbName: process.env.DB_NAME,
     url:
       process.env.COMPASS_URL ||
-      "mongodb://localhost:27017/" + process.env.DB_NAME,
+      'mongodb://localhost:27017/' + process.env.DB_NAME,
     host: process.env.DEV_HOST,
     user: process.env.DB_USER,
     mongoOptions: {
@@ -19,10 +22,10 @@ module.exports = {
   },
   serverPort: process.env.PORT,
   portal: {
-    baseApiUrl: "/v2",
+    baseApiUrl: '/v2',
     token: {
-      privateKey: "LŌcĀtĒ",
-      expiry: "30d",
+      privateKey: 'LŌcĀtĒ',
+      expiry: '30d',
     },
   },
   fast2smsAPI: {

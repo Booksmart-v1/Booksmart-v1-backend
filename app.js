@@ -1,9 +1,14 @@
 require("dotenv").config();
 let exp = require("express");
+const cors = require("cors");
+// const expressFileUpload = require("express-fileupload");
+
 let express = require("./configs/express");
 const mongoose = require("mongoose");
 const config = require("./configs/configs");
 // const socketio = require("socket.io");
+const multer = require("multer");
+const { GridFsStorage } = require("multer-gridfs-storage");
 
 // socket configuration
 const WebSockets = require("./utils/WebSocket");
@@ -25,6 +30,15 @@ mongoose
 /** Create HTTP server. */
 /** Create socket connection */
 
+// let bucket;
+// mongoose.connection.on('connected', () => {
+//   var db = mongoose.connections[0].db;
+//   bucket = new mongoose.mongo.GridFSBucket(db, {
+//     bucketName: 'bookImg',
+//   });
+//   console.log(bucket);
+// });
+
 const httpsLocalhost = require("https-localhost")();
 const certs = httpsLocalhost.getCerts();
 const app = express();
@@ -32,6 +46,8 @@ const server = require("http").Server(certs, app);
 require("./app/modules/Portal/socket/socket")(server);
 global.io = require("socket.io")(server);
 global.io.on("connection", WebSockets.connection);
+
+app.use(cors());
 
 app.get("/", function (req, res, next) {
   res.send("Welcome to Booksmart !");
