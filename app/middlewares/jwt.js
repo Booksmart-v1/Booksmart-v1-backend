@@ -1,16 +1,18 @@
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 // models
-import UserModel from "../models/User.js";
+const mongoose = require("mongoose");
 
-const SECRET_KEY = "some-secret-key";
+const userBody = mongoose.model("user");
 
-export const encode = async (req, res, next) => {
+const SECRET_KEY = "password234";
+
+const encode = async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    const user = await UserModel.getUserById(userId);
+    const { mobile } = req.body;
+    const user = await userBody.findOne({ mobile: mobile });
     const payload = {
       userId: user._id,
-      // userType: user.type,
+      mobile: mobile,
     };
     const authToken = jwt.sign(payload, SECRET_KEY);
     console.log("Auth", authToken);
@@ -21,7 +23,7 @@ export const encode = async (req, res, next) => {
   }
 };
 
-export const decode = (req, res, next) => {
+const decode = (req, res, next) => {
   if (!req.headers["authorization"]) {
     return res
       .status(400)
@@ -37,3 +39,4 @@ export const decode = (req, res, next) => {
     return res.status(401).json({ success: false, message: error.message });
   }
 };
+module.exports = { encode: encode, docode: decode };

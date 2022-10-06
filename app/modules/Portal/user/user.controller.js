@@ -157,6 +157,7 @@ class UsersController extends Controller {
           message: `OTP sent to mobile number <b>${mobile}</b>`,
           data: {
             userId: user1._id,
+            authorization: this.req.authToken,
           },
         });
       } else if (text.length === 0) {

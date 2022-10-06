@@ -1,3 +1,5 @@
+const { encode } = require("../../../middlewares/jwt");
+
 const UserController = require("./user.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
 module.exports = function (app, express) {
@@ -11,7 +13,7 @@ module.exports = function (app, express) {
     return new UserController().boot(req, res).getUser();
   });
 
-  router.post("/loginUser", (req, res) => {
+  router.post("/loginUser", encode, (req, res, next) => {
     return new UserController().boot(req, res).loginUser();
   });
 
