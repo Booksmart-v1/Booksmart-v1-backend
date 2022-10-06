@@ -40,7 +40,7 @@ const app = express();
 const server = require("http").Server(certs, app);
 require("./app/modules/Portal/socket/socket")(server);
 
-app.use(cors(), express.json());
+app.use(cors());
 
 app.get("/", function (req, res, next) {
   res.send("Welcome to Booksmart !");

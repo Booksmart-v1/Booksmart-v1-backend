@@ -7,29 +7,29 @@ const frequentUtility = new FrequentUtility();
 const bookAd = mongoose.model('bookAds');
 // const StreamChat = require("stream-chat").StreamChat;
 const e = require('connect-timeout');
-const aws = require('aws-sdk');
-const multer = require('multer');
-const multers3 = require('multer-s3');
+// const aws = require('aws-sdk');
+// const multer = require('multer');
+// const multers3 = require('multer-s3');
 
-const s3 = new aws.S3({
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_KEY,
-  region: process.env.S3_BUCKET_REGION,
-});
+// const s3 = new aws.S3({
+//   accessKeyId: process.env.S3_ACCESS_KEY,
+//   secretAccessKey: process.env.S3_SECRET_KEY,
+//   region: process.env.S3_BUCKET_REGION,
+// });
 
-const upload = (bucketName) =>
-  multer({
-    storage: multers3({
-      s3,
-      bucket: bucketName,
-      metadata: function (req, file, cb) {
-        cb(null, { fieldName: file.fieldName });
-      },
-      key: function (req, file, cb) {
-        cb(null, `bookImage-${Date.now()}.jpeg`);
-      },
-    }),
-  });
+// const upload = (bucketName) =>
+//   multer({
+//     storage: multers3({
+//       s3,
+//       bucket: bucketName,
+//       metadata: function (req, file, cb) {
+//         cb(null, { fieldName: file.fieldName });
+//       },
+//       key: function (req, file, cb) {
+//         cb(null, `bookImage-${Date.now()}.jpeg`);
+//       },
+//     }),
+//   });
 
 class BookAdsController extends Controller {
   async addBookAds() {
@@ -121,34 +121,34 @@ class BookAdsController extends Controller {
     }
   }
 
-  async uploadImageS3() {
-    try {
-      const uploadSingle = upload('booksmart').single('img-upload');
+  // async uploadImageS3() {
+  //   try {
+  //     const uploadSingle = upload('booksmart').single('img-upload');
 
-      uploadSingle(req, res, (err) => {
-        if (err)
-          return this.res
-            .status(400)
-            .json({ success: false, message: err.message });
+  //     uploadSingle(req, res, (err) => {
+  //       if (err)
+  //         return this.res
+  //           .status(400)
+  //           .json({ success: false, message: err.message });
 
-        console.log(this.req.files);
+  //       console.log(this.req.files);
 
-        this.res
-          .status(200)
-          .json({
-            success: true,
-            message: 'Image Uploaded to s3 successfully.',
-            data: this.req.files,
-          });
-      });
-    } catch (e) {
-      console.log(e);
-      return this.res.status(500).json({
-        success: false,
-        message: 'Something went wrong',
-      });
-    }
-  }
+  //       this.res
+  //         .status(200)
+  //         .json({
+  //           success: true,
+  //           message: 'Image Uploaded to s3 successfully.',
+  //           data: this.req.files,
+  //         });
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //     return this.res.status(500).json({
+  //       success: false,
+  //       message: 'Something went wrong',
+  //     });
+  //   }
+  // }
 
   async getMyBookAds() {
     try {

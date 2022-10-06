@@ -13,7 +13,7 @@
   "dependencies": {
     "@withvoid/make-validation": "^1.0.5",
     "async": "^3.2.3",
-    "aws-sdk": "^2.1219.0",
+    "aws-sdk": "^2.1227.0",
     "compression": "^1.7.4",
     "concurrently": "^7.1.0",
     "connect-timeout": "^1.9.0",
