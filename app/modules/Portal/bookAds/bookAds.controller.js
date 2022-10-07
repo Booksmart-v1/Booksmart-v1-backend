@@ -1,35 +1,43 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const mongoose = require('mongoose');
-const Controller = require('../../Base/Controller');
-const FrequentUtility = require('../../../services/Frequent');
+const mongoose = require("mongoose");
+const Controller = require("../../Base/Controller");
+const FrequentUtility = require("../../../services/Frequent");
 const frequentUtility = new FrequentUtility();
-const bookAd = mongoose.model('bookAds');
+const bookAd = mongoose.model("bookAds");
 // const StreamChat = require("stream-chat").StreamChat;
-const e = require('connect-timeout');
-// const aws = require('aws-sdk');
-// const multer = require('multer');
-// const multers3 = require('multer-s3');
+const e = require("connect-timeout");
+const aws = require("aws-sdk");
+const { S3Client } = require("@aws-sdk/client-s3");
 
-// const s3 = new aws.S3({
-//   accessKeyId: process.env.S3_ACCESS_KEY,
-//   secretAccessKey: process.env.S3_SECRET_KEY,
-//   region: process.env.S3_BUCKET_REGION,
-// });
+const multer = require("multer");
+const multers3 = require("multer-s3");
 
-// const upload = (bucketName) =>
-//   multer({
-//     storage: multers3({
-//       s3,
-//       bucket: bucketName,
-//       metadata: function (req, file, cb) {
-//         cb(null, { fieldName: file.fieldName });
-//       },
-//       key: function (req, file, cb) {
-//         cb(null, `bookImage-${Date.now()}.jpeg`);
-//       },
-//     }),
-//   });
+let s3 = new S3Client({
+  region: "ap-south-1",
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET_KEY,
+    region: process.env.S3_BUCKET_REGION,
+  },
+  sslEnabled: false,
+  s3ForcePathStyle: true,
+  signatureVersion: "v4",
+});
+
+const upload = (bucketName) =>
+  multer({
+    storage: multers3({
+      s3,
+      bucket: bucketName,
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: file.fieldName });
+      },
+      key: function (req, file, cb) {
+        cb(null, `bookImage-${Date.now()}.jpeg`);
+      },
+    }),
+  });
 
 class BookAdsController extends Controller {
   async addBookAds() {
@@ -67,13 +75,13 @@ class BookAdsController extends Controller {
         console.log(bookId);
         return this.res.status(400).json({
           success: false,
-          message: 'Please fill all the fields',
+          message: "Please fill all the fields",
         });
       }
       if (sellerPincode.length !== 6) {
         return this.res.status(400).json({
           success: false,
-          message: 'Please enter valid pincode',
+          message: "Please enter valid pincode",
         });
       }
       console.log(bookId);
@@ -106,14 +114,14 @@ class BookAdsController extends Controller {
       if (limit === undefined || userId === undefined) {
         return this.res.status(400).json({
           success: false,
-          message: 'Please fill all the fields',
+          message: "Please fill all the fields",
         });
       }
       //   let bookAds = await bookAd.find({});
       let bookAdLimits = await bookAd.find({}).limit(limit);
       return this.res.status(200).json({
         success: true,
-        message: 'Book Ads fetched successfully',
+        message: "Book Ads fetched successfully",
         data: bookAdLimits,
       });
     } catch (error) {
@@ -121,34 +129,32 @@ class BookAdsController extends Controller {
     }
   }
 
-  // async uploadImageS3() {
-  //   try {
-  //     const uploadSingle = upload('booksmart').single('img-upload');
+  async uploadImageS3() {
+    try {
+      const uploadSingle = upload("booksmart").single("img-upload");
 
-  //     uploadSingle(req, res, (err) => {
-  //       if (err)
-  //         return this.res
-  //           .status(400)
-  //           .json({ success: false, message: err.message });
+      uploadSingle(this.req, this.res, (err) => {
+        if (err)
+          return this.res
+            .status(400)
+            .json({ success: false, message: err.message });
 
-  //       console.log(this.req.files);
+        console.log(this.req.file);
 
-  //       this.res
-  //         .status(200)
-  //         .json({
-  //           success: true,
-  //           message: 'Image Uploaded to s3 successfully.',
-  //           data: this.req.files,
-  //         });
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //     return this.res.status(500).json({
-  //       success: false,
-  //       message: 'Something went wrong',
-  //     });
-  //   }
-  // }
+        this.res.status(200).json({
+          success: true,
+          message: "Image Uploaded to s3 successfully.",
+          data: this.req.file,
+        });
+      });
+    } catch (e) {
+      console.log(e);
+      return this.res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+  }
 
   async getMyBookAds() {
     try {
@@ -157,7 +163,7 @@ class BookAdsController extends Controller {
         console.log(limit, userId);
         return this.res.status(400).json({
           success: false,
-          message: 'Please fill all the fields',
+          message: "Please fill all the fields",
         });
       }
       let a = await bookAd.find({
@@ -168,7 +174,7 @@ class BookAdsController extends Controller {
       if (a.length === 0) {
         a = [];
       }
-      let b = await bookAd.find({}).where('interestedBuyers').all(userId);
+      let b = await bookAd.find({}).where("interestedBuyers").all(userId);
       if (b.length === 0) {
         b = [];
       }
@@ -176,7 +182,7 @@ class BookAdsController extends Controller {
 
       return this.res.status(200).json({
         success: true,
-        message: 'My Book Ads fetched successfully',
+        message: "My Book Ads fetched successfully",
         data: {
           selling: a,
           buying: b,
@@ -186,7 +192,7 @@ class BookAdsController extends Controller {
       console.log(e);
       return this.res.status(500).json({
         success: false,
-        message: 'Something went wrong',
+        message: "Something went wrong",
       });
     }
   }

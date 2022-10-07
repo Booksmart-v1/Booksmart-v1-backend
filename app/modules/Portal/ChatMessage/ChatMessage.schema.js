@@ -1,6 +1,4 @@
-import mongoose from "mongoose";
-import { v4 as uuidv4 } from "uuid";
-
+const mongoose = require("mongoose");
 // export const CHAT_ROOM_TYPES = {
 //   CONSUMER_TO_CONSUMER: "consumer-to-consumer",
 //   CONSUMER_TO_SUPPORT: "consumer-to-support",
