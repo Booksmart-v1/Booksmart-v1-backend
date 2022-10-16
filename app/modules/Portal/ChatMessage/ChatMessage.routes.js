@@ -4,7 +4,7 @@ module.exports = function (app, express) {
   const router = express.Router();
 
   router.post("/postInChatRoom", (req, res) => {
-    return new chatMessageSchema().boot(req, res).initiateChat();
+    return new chatMessageSchema().boot(req, res).postInChatRoom();
   });
 
   app.use(config, router);

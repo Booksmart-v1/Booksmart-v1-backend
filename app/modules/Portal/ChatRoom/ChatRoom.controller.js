@@ -7,9 +7,10 @@ const ChatRoomUtil = mongoose.model("ChatRoom");
 const e = require("connect-timeout");
 
 class ChatRoomController extends Controller {
-  async initiateChat(userIds, chatInitiator) {
+  async initiateChat() {
     try {
-      const availableRoom = await this.findOne({
+      const { userIds, chatInitiator } = this.req.body;
+      const availableRoom = await ChatRoomUtil.findOne({
         userIds: {
           $size: userIds.length,
           $all: [...userIds],
@@ -26,13 +27,13 @@ class ChatRoomController extends Controller {
         });
       }
 
-      const newRoom = await this.create({ userIds, chatInitiator });
+      const newRoom = await ChatRoomUtil.create({ userIds, chatInitiator });
       return this.res.status(200).json({
         success: true,
         message: "Creating a new chat room...",
         data: {
           isNew: true,
-          chatRoomId: availableRoom._doc._id,
+          chatRoomId: newRoom._doc._id,
         },
       });
     } catch (error) {

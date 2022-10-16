@@ -7,15 +7,16 @@ const ChatMessageUtil = mongoose.model("ChatMessage");
 const e = require("connect-timeout");
 
 class ChatMessageController extends Controller {
-  async postInChatRoom(chatRoomId, message, postedByUser) {
+  async postInChatRoom() {
     try {
-      const post = await this.create({
+      const { chatRoomId, message, postedByUser } = this.req.body;
+      const post = await ChatMessageUtil.create({
         chatRoomId,
         message,
         postedByUser,
         readByRecipients: { readByUserId: postedByUser },
       });
-      const aggregate = await this.aggregate([
+      const aggregate = await ChatMessageUtil.aggregate([
         // get post where _id = post._id
         { $match: { _id: post._id } },
         // do a join on another table called users, and
