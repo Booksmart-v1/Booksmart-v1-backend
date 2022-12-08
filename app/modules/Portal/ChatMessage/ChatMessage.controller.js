@@ -82,5 +82,35 @@ class ChatMessageController extends Controller {
       });
     }
   }
+
+  async getMessagesInChatRoom() {
+    try {
+
+      const {chatRoomId} = this.req.query;
+
+      if(chatRoomId===undefined){
+        return this.res.status(400).json({
+          success: false,
+          message: 'Need to provide Chat Room Id',
+        });
+      }
+
+      const messages = await ChatMessageUtil.find({chatRoomId: chatRoomId});
+      return this.res.status(200).json({
+        success: true,
+        message: 'Messages fetched successfully',
+        data: messages,
+      });
+
+
+    } catch(e){
+      console.log("err on get chat method", e);
+      console.log('error on start chat method', error);
+      return this.res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+      });
+    }
+  }
 }
 module.exports = ChatMessageController;

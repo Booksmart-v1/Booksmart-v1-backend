@@ -7,5 +7,9 @@ module.exports = function (app, express) {
     return new chatMessageSchema().boot(req, res).postInChatRoom();
   });
 
+  router.get('/getMessagesInChatRoom', (req, res) => {
+    return new chatMessageSchema().boot(req, res).getMessagesInChatRoom();
+  });
+
   app.use(config, router);
 };

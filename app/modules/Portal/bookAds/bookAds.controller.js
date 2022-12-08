@@ -139,7 +139,7 @@ class BookAdsController extends Controller {
             .status(400)
             .json({ success: false, message: err.message });
 
-        console.log(this.req.file);
+        console.log(this.req);
 
         this.res.status(200).json({
           success: true,
