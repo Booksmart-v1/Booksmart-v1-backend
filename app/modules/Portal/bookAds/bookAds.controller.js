@@ -12,6 +12,7 @@ const { S3Client } = require("@aws-sdk/client-s3");
 
 const multer = require("multer");
 const multers3 = require("multer-s3");
+const axios = require("axios");
 
 let s3 = new S3Client({
   region: "ap-south-1",
@@ -85,8 +86,35 @@ class BookAdsController extends Controller {
         });
       }
       console.log(bookId);
+      let lat = 19.121;
+      let lon = 72.899;
+      axios
+        .get(
+          `https://india-pincode-with-latitude-and-longitude.p.rapidapi.com/api/v1/pincode/${sellerPincode}`,
+          {
+            headers: {
+              'X-RapidAPI-Key':
+                '97cc9d3ae5mshc34d4671b043d42p1451eajsnb18bf2761e25',
+              'X-RapidAPI-Host':
+                'india-pincode-with-latitude-and-longitude.p.rapidapi.com',
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          
+          lat = response.data[0].lat;
+          lon = response.data[0].lng;
+          
+         
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       const candidate = new bookAd({
         ...newBookAds,
+        lat: lat,
+        lon: lon
       });
       const savedBookAd = await candidate.save();
       return this.res.status(200).json({
