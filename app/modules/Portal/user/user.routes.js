@@ -13,6 +13,10 @@ module.exports = function (app, express) {
     return new UserController().boot(req, res).getUser();
   });
 
+  router.get('/getOneUser', (req, res) => {
+    return new UserController().boot(req, res).getOneUser();
+  });
+
   router.post("/loginUser", encode, (req, res, next) => {
     return new UserController().boot(req, res).loginUser();
   });

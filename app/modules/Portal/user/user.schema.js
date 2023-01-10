@@ -9,6 +9,7 @@ const UserSchema = new schema({
   isAccountVerified: { type: Boolean, required: false },
   mobile: { type: Number, required: true },
   email: { type: String },
+  usersInContact: [{ type: String, required: false}],
   profilePicUrl: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

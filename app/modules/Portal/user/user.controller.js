@@ -31,6 +31,7 @@ class UsersController extends Controller {
 
       const candidate = new user({
         ...newCandidate,
+        usersInContact: [],
       });
       const user1 = await candidate.save();
       const newWishlist = new wishlist({
@@ -98,6 +99,25 @@ class UsersController extends Controller {
       return this.res.status(500).json({
         success: false,
         message: 'A110: Error in fetching candidates',
+        error: error,
+      });
+    }
+  }
+
+  async getOneUser() {
+    try {
+      let { userId } = this.req.query;
+      const candidate = await user.findOne({ _id: userId });
+      return this.res.status(200).json({
+        success: true,
+        message: 'Candidates fetched successfully',
+        data: candidate,
+      });
+    } catch (error) {
+      console.error(error);
+      return this.res.status(500).json({
+        success: false,
+        message: 'A110: Error in fetching candidate',
         error: error,
       });
     }
