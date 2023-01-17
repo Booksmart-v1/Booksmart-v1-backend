@@ -31,6 +31,7 @@ class ChatRoomController extends Controller {
           message: 'Please provide seller and buyer Id.',
         });
       }
+
       const availableRoom = await ChatRoomUtil.findOne({
         userIds: {
           $size: 2,
@@ -38,7 +39,10 @@ class ChatRoomController extends Controller {
         },
       });
       const userIds = [sellerId, buyerId];
+      console.log(userIds);
+
       if (availableRoom) {
+        console.log('Room available');
         return this.res.status(200).json({
           success: true,
           message: 'Retrieving an old chat room',
@@ -74,7 +78,10 @@ class ChatRoomController extends Controller {
         { _id: sellerId },
         { $set: { usersInContact: a } }
       );
-      await seller.updateOne({ _id: buyerId }, { $set: { usersInContact: b } });
+      await seller.updateMany(
+        { _id: buyerId },
+        { $set: { usersInContact: b } }
+      );
 
       return this.res.status(200).json({
         success: true,

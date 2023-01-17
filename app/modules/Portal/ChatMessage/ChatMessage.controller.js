@@ -10,6 +10,14 @@ class ChatMessageController extends Controller {
   async postInChatRoom() {
     try {
       const { chatRoomId, message, postedByUser } = this.req.body;
+
+      if(chatRoomId === undefined || message === undefined || postedByUser === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: 'Please fill all the required fields.',
+        });
+      }
+
       const post = await ChatMessageUtil.create({
         chatRoomId,
         message,
