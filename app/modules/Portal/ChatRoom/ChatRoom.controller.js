@@ -78,10 +78,7 @@ class ChatRoomController extends Controller {
         { _id: sellerId },
         { $set: { usersInContact: a } }
       );
-      await seller.updateMany(
-        { _id: buyerId },
-        { $set: { usersInContact: b } }
-      );
+      await buyer.updateMany({ _id: buyerId }, { $set: { usersInContact: b } });
 
       return this.res.status(200).json({
         success: true,
