@@ -18,6 +18,14 @@ module.exports = function (app, express) {
     return new BookAdsController().boot(req, res).uploadImageS3();
   });
 
+  router.post("/markAsSold", (req, res) => {
+    return new BookAdsController().boot(req, res).markAsSold();
+  });
+
+  router.post("/deleteAd", (req, res) => {
+    return new BookAdsController().boot(req, res).deleteAd();
+  });
+
   //   router.post("/loginUser", (req, res) => {
   //     return new UserController().boot(req, res).loginUser();
   //   });
