@@ -72,3 +72,5 @@ server.listen(config.serverPort, () => {
   console.log("process.env.NODE_ENV", process.env.NODE_ENV);
   console.log(`Server running at http://localhost:${config.serverPort}`);
 });
+
+module.exports = app;

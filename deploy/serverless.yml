@@ -1,0 +1,126 @@
+service: booksmartBackend
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  role: arn:aws:iam::432746650536:role/backend1
+  memorySize: 512
+  stage: dev
+  timeout: 15
+  region: ap-south-1
+# you can overwrite defaults here 
+#  stage: dev
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+#  iam:
+#    role:
+#      statements:
+#        - Effect: "Allow"
+#          Action:
+#            - "s3:ListBucket"
+#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#        - Effect: "Allow"
+#          Action:
+#            - "s3:PutObject"
+#          Resource:
+#            Fn::Join:
+#              - ""
+#              - - "arn:aws:s3:::"
+#                - "Ref" : "ServerlessDeploymentBucket"
+#                - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+#package:
+#  patterns:
+#    - '!exclude-me.js'
+#    - '!exclude-me-dir/**'
+#    - include-me.js
+#    - include-me-dir/**
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http: ANY /{proxy+}
+      - http: ANY /
+    environment:
+      NODE_ENV: Development
+      PORT: 4000
+      # Mongo Config
+      MONGODB_URI: mongodb+srv://admin:N8a9ehaYgsUMWruZ@booksmart.zjufe.mongodb.net/?retryWrites=true&w=majority
+      COMPASS_URL: mongodb://localhost:27017/booksmart
+      DB_PORT: 27017
+      DB_NAME: booksmart
+      PROD_HOST: localhost
+      DEV_HOST: localhost
+      LOCAL_HOST: localhost
+      DB_USER: Aagam
+      DB_PASSKEY: Abooksmart*0608
+
+      # OTP
+
+      FAST2SMS: zAq9ToJ0ydvHlOe6K43MFL2pYSBxVXgtI8sUNah1P5ckwG7QDR3q97zJOAKQVIBdPTN5M1x8Rp2bs4GW
+
+      #googleBookApikey
+
+      BOOKAPI: AIzaSyCVpFVL_ZIAtyysjaYqmFWs0yhWO8e-8FE
+
+      #S3
+
+      S3_ACCESS_KEY: AKIAWJQNV3OUCRISX5F7
+      S3_SECRET_KEY: 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
+      S3_BUCKET_REGION: ap-south-1
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
