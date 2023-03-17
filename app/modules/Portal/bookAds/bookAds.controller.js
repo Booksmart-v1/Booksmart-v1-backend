@@ -214,6 +214,36 @@ class BookAdsController extends Controller {
     }
   }
 
+  async markAsUnsold() {
+    try {
+      let { id } = this.req.body;
+      if (id === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Please fill all the fields",
+        });
+      }
+
+      const updateDoc = {
+        $set: {
+          sold: false,
+        },
+      };
+      const result = await bookAd.updateOne({ _id: id }, updateDoc);
+      return this.res.status(200).json({
+        success: true,
+        message: `The book Ad has been marked as unsold.`,
+        data: result,
+      });
+    } catch (e) {
+      console.log(e);
+      return this.res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+  }
+
   async deleteAd() {
     try {
       let { id } = this.req.body;

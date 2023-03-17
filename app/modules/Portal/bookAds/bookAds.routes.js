@@ -22,6 +22,10 @@ module.exports = function (app, express) {
     return new BookAdsController().boot(req, res).markAsSold();
   });
 
+  router.post("/markAsUnsold", (req, res) => {
+    return new BookAdsController().boot(req, res).markAsUnsold();
+  });
+
   router.post("/deleteAd", (req, res) => {
     return new BookAdsController().boot(req, res).deleteAd();
   });
