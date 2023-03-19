@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const chatRoomSchema = new mongoose.Schema({
   userIds: Array,
   chatInitiator: String,
+  bookAdId: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

@@ -24,11 +24,17 @@ class ChatRoomController extends Controller {
 
   async initiateChat() {
     try {
-      const { sellerId, buyerId, chatInitiator } = this.req.body;
+      const { sellerId, buyerId, bookAdId, chatInitiator } = this.req.body;
       if (sellerId === undefined || buyerId === undefined) {
         return this.res.status(400).json({
           success: false,
           message: 'Please provide seller and buyer Id.',
+        });
+      }
+      if (bookAdId === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: 'Please provide id of book Ad the chat will pertain to.',
         });
       }
 
@@ -37,6 +43,7 @@ class ChatRoomController extends Controller {
           $size: 2,
           $all: [sellerId, buyerId],
         },
+        bookAdId: bookAdId
       });
       const userIds = [sellerId, buyerId];
       console.log(userIds);
@@ -60,7 +67,7 @@ class ChatRoomController extends Controller {
         });
       }
 
-      const newRoom = await ChatRoomUtil.create({ userIds, chatInitiator });
+      const newRoom = await ChatRoomUtil.create({ userIds, bookAdId, chatInitiator });
 
       let seller = UserUtil.findOne({ _id: sellerId });
       let buyer = UserUtil.findOne({ _id: buyerId });
@@ -78,7 +85,7 @@ class ChatRoomController extends Controller {
         { _id: sellerId },
         { $set: { usersInContact: a } }
       );
-      await buyer.updateMany({ _id: buyerId }, { $set: { usersInContact: b } });
+      await buyer.updateOne({ _id: buyerId }, { $set: { usersInContact: b } });
 
       return this.res.status(200).json({
         success: true,
