@@ -31,22 +31,22 @@ class ChatRoomController extends Controller {
           message: 'Please provide seller and buyer Id.',
         });
       }
-      if (bookAdId === undefined) {
-        return this.res.status(400).json({
-          success: false,
-          message: 'Please provide id of book Ad the chat will pertain to.',
-        });
-      }
+      
 
-      const availableRoom = await ChatRoomUtil.findOne({
+      const availableRooms = await ChatRoomUtil.find({
         userIds: {
           $size: 2,
           $all: [sellerId, buyerId],
         },
-        bookAdId: bookAdId
+        // bookAdId: bookAdId
       });
       const userIds = [sellerId, buyerId];
       console.log(userIds);
+      availableRoomIds=[]
+
+      for(let i =0;i<availableRooms.length;i++){
+        availableRoomIds.push(availableRooms[i]._doc._id);
+      }
 
       if (availableRoom) {
         console.log('Room available');
@@ -55,7 +55,7 @@ class ChatRoomController extends Controller {
           message: 'Retrieving an old chat room',
           data: {
             isNew: false,
-            chatRoomId: availableRoom._doc._id,
+            chatRoomIds: availableRoomIds,
           },
         });
       }
@@ -64,6 +64,12 @@ class ChatRoomController extends Controller {
         return this.res.status(400).json({
           success: false,
           message: 'Please provide initiator of new chat.',
+        });
+      }
+      if (bookAdId === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: 'Please provide id of book Ad the chat will pertain to.',
         });
       }
 
