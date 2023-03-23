@@ -42,7 +42,7 @@ class ChatRoomController extends Controller {
       });
       const userIds = [sellerId, buyerId];
       console.log(userIds);
-      availableRoomIds=[]
+      let availableRoomIds=[]
 
       if(bookAdId===undefined){
 
@@ -61,7 +61,7 @@ class ChatRoomController extends Controller {
       }
       
 
-      if (len(availableRoomIds)>0) {
+      if (availableRoomIds.length>0) {
         console.log('Room available');
         return this.res.status(200).json({
           success: true,

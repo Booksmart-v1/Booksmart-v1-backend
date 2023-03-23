@@ -111,7 +111,7 @@ class NotificationsController extends Controller {
       });
 
       //IF TYPE IS ACCEPT CREATE NEW CHAT DOC IN MONGODB
-      // const a = await notifs.deleteOne({ _id: notifId });
+      const a = await notifs.deleteOne({ _id: notifId });
       const saveNotif = await newNotif.save();
       return this.res.status(200).json({
         success: true,
