@@ -44,11 +44,24 @@ class ChatRoomController extends Controller {
       console.log(userIds);
       availableRoomIds=[]
 
-      for(let i =0;i<availableRooms.length;i++){
-        availableRoomIds.push(availableRooms[i]._doc._id);
-      }
+      if(bookAdId===undefined){
 
-      if (availableRoom) {
+        for(let i =0;i<availableRooms.length;i++){
+          availableRoomIds.push(availableRooms[i]._doc._id);
+        }
+
+      } else {
+        for(let i =0;i<availableRooms.length;i++){
+          if (availableRooms[i]._doc.bookAdId===bookAdId){
+            availableRoomIds.push(availableRooms[i]._doc._id);
+            break;
+          }
+            
+        }
+      }
+      
+
+      if (len(availableRoomIds)>0) {
         console.log('Room available');
         return this.res.status(200).json({
           success: true,
