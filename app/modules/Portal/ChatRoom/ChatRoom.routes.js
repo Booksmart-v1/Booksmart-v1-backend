@@ -6,6 +6,9 @@ module.exports = function (app, express) {
   router.post("/initiateChat", (req, res) => {
     return new chatRoomSchema().boot(req, res).initiateChat();
   });
+  router.post("/closedChat", (req, res) => {
+    return new chatRoomSchema().boot(req, res).closedChat();
+  });
 
   app.use(config, router);
 };
