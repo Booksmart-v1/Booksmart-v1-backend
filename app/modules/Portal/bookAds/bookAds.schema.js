@@ -21,6 +21,7 @@ const bookAdsSchema = new schema({
   bookDescription: { type: String, required: false },
   bookCondition: { type: String, required: true },
   sold: { type: Boolean, required: true },
+  buyerId: { type: String, required: false },
   isLiked: { type: Boolean, required: false },
   lat: {type: Number, required: true},
   lon: {type: Number, required: true},

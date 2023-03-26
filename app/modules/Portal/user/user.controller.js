@@ -32,6 +32,8 @@ class UsersController extends Controller {
       const candidate = new user({
         ...newCandidate,
         usersInContact: [],
+        booksSold: [],
+        booksBought: [],
       });
       const user1 = await candidate.save();
       const newWishlist = new wishlist({

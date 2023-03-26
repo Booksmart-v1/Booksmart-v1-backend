@@ -5,6 +5,7 @@ const Controller = require("../../Base/Controller");
 const FrequentUtility = require("../../../services/Frequent");
 const frequentUtility = new FrequentUtility();
 const bookAd = mongoose.model("bookAds");
+const user = mongoose.model('user');
 // const StreamChat = require("stream-chat").StreamChat;
 const e = require("connect-timeout");
 const aws = require("aws-sdk");
@@ -186,7 +187,7 @@ class BookAdsController extends Controller {
 
   async markAsSold() {
     try {
-      let { id } = this.req.body;
+      let { id, buyerId } = this.req.body;
       if (id === undefined) {
         return this.res.status(400).json({
           success: false,
@@ -194,12 +195,33 @@ class BookAdsController extends Controller {
         });
       }
 
-      const updateDoc = {
+      let updateDoc = {
         $set: {
           sold: true,
+          buyerId: buyerId===undefined?"unknown":buyerId
         },
       };
       const result = await bookAd.updateOne({ _id: id }, updateDoc);
+      const seller = await user.findOne({_id:result.sellerId})
+      let bs = seller.booksSold
+      bs.push(result._id)
+      updateDoc = {
+        $set: {
+          booksSold: bs
+        }
+      }
+      const r1 = await user.updateOne({_id:result.sellerId}, updateDoc)
+      if(buyerId!==undefined){
+        const buyer = await user.findOne({_id:buyerId})
+        let bb = seller.booksBought
+        bb.push(result._id)
+        updateDoc = {
+          $set: {
+            booksBought: bb
+          }
+        }
+        const r2 = await user.updateOne({_id:buyerId}, updateDoc)
+      }
       return this.res.status(200).json({
         success: true,
         message: `The book Ad has been marked as sold.`,
@@ -216,7 +238,7 @@ class BookAdsController extends Controller {
 
   async markAsUnsold() {
     try {
-      let { id } = this.req.body;
+      let { id, buyerId } = this.req.body;
       if (id === undefined) {
         return this.res.status(400).json({
           success: false,
@@ -224,12 +246,33 @@ class BookAdsController extends Controller {
         });
       }
 
-      const updateDoc = {
+      let updateDoc = {
         $set: {
           sold: false,
+          buyerId: undefined
         },
       };
       const result = await bookAd.updateOne({ _id: id }, updateDoc);
+      const seller = await user.findOne({_id:result.sellerId})
+      let bs = seller.booksSold
+      bs = bs.splice(bs.indexOf(result._id),1)
+      updateDoc = {
+        $set: {
+          booksSold: bs
+        }
+      }
+      const r1 = await user.updateOne({_id:result.sellerId}, updateDoc)
+      if(buyerId!==undefined){
+        const buyer = await user.findOne({_id:buyerId})
+        let bb = seller.booksBought
+        bb = bb.splice(bb.indexOf(result._id),1)
+        updateDoc = {
+          $set: {
+            booksBought: bb
+          }
+        }
+        const r2 = await user.updateOne({_id:buyerId}, updateDoc)
+      }
       return this.res.status(200).json({
         success: true,
         message: `The book Ad has been marked as unsold.`,

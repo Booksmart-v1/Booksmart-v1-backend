@@ -239,3 +239,28 @@ class NotificationsController extends Controller {
 }
 
 module.exports = NotificationsController;
+
+
+// {
+//   Name: "error, client not passed",
+//   conversation: &codexApi.Conversation{
+//     Id: &proto.Id{
+//       Id: "don:core:dvrv-us-1:devo/0:conversation/304",
+//     },
+//   },
+//   prompts: []string{
+//     "Can you summarize the conversation between a customer and support agent given below?\nCustomer: Hi! I have an issue in Trails\nSupport Agent: Hi Sir, what seems to be the issue?\nCustomer: I cannot seem to navigate the trails graph properly\nSupport Agent: Just use scrolling for zooming, and dragging for navigation to different parts. Hope this makes it clear!\n",
+//   },
+//   enableOpenAIMock:         false,
+//   enableTimelineMock:       false,
+//   enableTFMock:             false,
+//   wantUSEError:             true,
+//   enableHoneycombMock:      false,
+//   countInsertEvents:        0,
+//   countDeleteEvents:        0,
+//   wantHoneycombInsertError: true,
+//   wantHoneycombDeleteError: true,
+//   wantReIndex:              false,
+//   reIndexError:             false,
+//   wantErr:                  true,
+// },
