@@ -43,17 +43,20 @@ class ChatRoomController extends Controller {
       console.log(userIds);
       let availableRoomIds = [];
       let closedRoomIds = [];
+      let bookAdIds = [];
 
       if (bookAdId === undefined) {
         for (let i = 0; i < availableRooms.length; i++) {
           availableRoomIds.push(availableRooms[i]._doc._id);
           closedRoomIds.push(availableRooms[i]._doc.closed);
+          bookAdIds.push(availableRooms[i]._doc.bookAdId);
         }
       } else {
         for (let i = 0; i < availableRooms.length; i++) {
           if (availableRooms[i]._doc.bookAdId === bookAdId) {
             availableRoomIds.push(availableRooms[i]._doc._id);
             closedRoomIds.push(availableRooms[i]._doc.closed);
+            bookAdIds.push(availableRooms[i]._doc.bookAdId);
             break;
           }
         }
@@ -68,6 +71,7 @@ class ChatRoomController extends Controller {
             isNew: false,
             chatRoomIds: availableRoomIds,
             closedRoomIds: closedRoomIds,
+            bookAdIds: bookAdIds,
           },
         });
       }
@@ -135,7 +139,7 @@ class ChatRoomController extends Controller {
           message: "Please provide chat room ID.",
         });
       }
-      if (typeof value != Boolean) {
+      if (value !== true && value !== false) {
         return this.res.status(400).json({
           success: false,
           message: "Value is not a boolean.",

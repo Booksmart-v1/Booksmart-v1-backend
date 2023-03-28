@@ -212,17 +212,18 @@ class BookAdsController extends Controller {
       console.log(result);
       let bs = seller[0].booksSold;
 
-      bs.push(result._id);
+      bs.push(ba[0]._id);
+      console.log(bs);
       updateDoc = {
         $set: {
           booksSold: bs,
         },
       };
-      const r1 = await user.updateOne({ _id: result.sellerId }, updateDoc);
+      const r1 = await user.updateOne({ _id: ba[0].sellerId }, updateDoc);
       if (buyerId !== undefined) {
         const buyer = await user.findOne({ _id: buyerId });
         let bb = seller.booksBought;
-        bb.push(result._id);
+        bb.push(ba[0]._id);
         updateDoc = {
           $set: {
             booksBought: bb,
