@@ -203,13 +203,10 @@ class BookAdsController extends Controller {
       };
 
       const ba = await bookAd.find({ _id: id });
-      console.log(id);
-      console.log(ba);
+
       const result = await bookAd.updateOne({ _id: id }, updateDoc);
       const seller = await user.find({ _id: ba[0].sellerId });
-      console.log(seller);
-      console.log(ba[0]);
-      console.log(result);
+
       let bs = seller[0].booksSold;
 
       bs.push(ba[0]._id);
@@ -261,20 +258,26 @@ class BookAdsController extends Controller {
           buyerId: undefined,
         },
       };
+      const mu = await bookAd.find({ _id: id });
+      console.log(id);
+      console.log(mu);
       const result = await bookAd.updateOne({ _id: id }, updateDoc);
-      const seller = await user.findOne({ _id: result.sellerId });
-      let bs = seller.booksSold;
-      bs = bs.splice(bs.indexOf(result._id), 1);
+      const seller = await user.find({ _id: mu[0].sellerId });
+      console.log(seller);
+      console.log(mu[0]);
+      console.log(result);
+      let bs = seller[0].booksSold;
+      bs = bs.slice(mu[0]._id, 1);
       updateDoc = {
         $set: {
           booksSold: bs,
         },
       };
-      const r1 = await user.updateOne({ _id: result.sellerId }, updateDoc);
+      const r1 = await user.updateOne({ _id: mu[0].sellerId }, updateDoc);
       if (buyerId !== undefined) {
         const buyer = await user.findOne({ _id: buyerId });
         let bb = seller.booksBought;
-        bb = bb.splice(bb.indexOf(result._id), 1);
+        bb = bb.slice(mu[0]._id, 1);
         updateDoc = {
           $set: {
             booksBought: bb,
