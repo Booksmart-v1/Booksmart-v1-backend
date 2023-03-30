@@ -216,7 +216,9 @@ class BookAdsController extends Controller {
           booksSold: bs,
         },
       };
-      const r1 = await user.updateOne({ _id: ba[0].sellerId }, updateDoc);
+      if (!seller[0].booksSold.includes(ba[0]._id)) {
+        const r1 = await user.updateOne({ _id: ba[0].sellerId }, updateDoc);
+      }
       if (buyerId !== undefined) {
         const buyer = await user.findOne({ _id: buyerId });
         let bb = seller.booksBought;
