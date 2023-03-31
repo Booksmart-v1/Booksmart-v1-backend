@@ -7,6 +7,10 @@ module.exports = function (app, express) {
     return new BookAdsController().boot(req, res).addBookAds();
   });
 
+  router.post("/updateBookAds", (req, res) => {
+    return new BookAdsController().boot(req, res).updateBookAds();
+  });
+
   router.get("/getBookAds", (req, res) => {
     return new BookAdsController().boot(req, res).getBookAds();
   });

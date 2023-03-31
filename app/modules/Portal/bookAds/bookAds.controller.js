@@ -135,6 +135,58 @@ class BookAdsController extends Controller {
     }
   }
 
+  async updateBookAds() {
+    try {
+      let newBookAds = this.req.body;
+      let {
+        bookAdId,
+        bookPrice,
+        bookImageUrl,
+        bookDescription,
+        bookCondition,
+        sellerAddress,
+        sellerPincode,
+      } = this.req.body;
+      if (
+        bookAdId===undefined
+      ) {
+        console.log(bookId);
+        return this.res.status(400).json({
+          success: false,
+          message: "Please fill the id field",
+        });
+      }
+      if (sellerPincode!==undefined && sellerPincode.length !== 6) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Please enter valid pincode",
+        });
+      }
+      console.log(bookAdId);
+      let updateDoc = { $set: {} }
+      if(bookPrice!==undefined) updateDoc.$set.bookPrice = bookPrice
+      if(bookImageUrl!==undefined) updateDoc.$set.bookImageUrl = bookImageUrl
+      if(bookDescription!==undefined) updateDoc.$set.bookDescription = bookDescription
+      if(bookCondition!==undefined) updateDoc.$set.bookCondition = bookCondition
+      if(sellerAddress!==undefined) updateDoc.$set.sellerAddress = sellerAddress
+      if(sellerPincode!==undefined) updateDoc.$set.sellerPincode = sellerPincode
+      
+      const updateBookAd = await bookAd.updateOne({_id: bookAdId}, updateDoc);
+      return this.res.status(200).json({
+        success: true,
+        message: `Book Ad updated successfully`,
+        data: {
+          bookAdId: bookAdId,
+          bookPrice: bookPrice,
+          bookCondition: bookCondition,
+          sellerAddress: sellerAddress,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async getBookAds() {
     try {
       let { limit, userId } = this.req.query;

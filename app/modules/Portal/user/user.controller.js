@@ -14,7 +14,14 @@ class UsersController extends Controller {
     try {
       let newCandidate = this.req.body;
 
-      let { mobile, name } = this.req.body;
+      let { mobile, name, email, profilePicUrl } = this.req.body;
+
+      if( mobile === undefined || name === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: 'Mobile and name fields are required.',
+        });
+      }
 
       // check duplicate phone Number
       const phoneExist = await user.findOne({ mobile });
@@ -25,9 +32,6 @@ class UsersController extends Controller {
           message: 'Phone Number already exists. Please Sign in.',
         });
       }
-
-      //   newCandidate["candidateId"] = await this.verifyAndPrepareCandidateId();
-      // create new user
 
       const candidate = new user({
         ...newCandidate,
@@ -83,6 +87,46 @@ class UsersController extends Controller {
       return this.res.status(500).json({
         success: false,
         message: 'A110: Error in adding candidate',
+        error: error,
+      });
+    }
+  }
+
+  async updateUser() {
+    try {
+      let newCandidate = this.req.body;
+
+      let { userId, name, email, profilePicUrl } = this.req.body;
+
+      if( userId === undefined ) {
+        return this.res.status(400).json({
+          success: false,
+          message: 'userId field is required.',
+        });
+      }
+
+      let updateDoc = { $set: {} }
+      if(name!==undefined) updateDoc.$set.name = name
+      if(email!==undefined) updateDoc.$set.email = email
+      if(profilePicUrl!==undefined) updateDoc.$set.profilePicUrl = profilePicUrl
+
+      const updateUser = await user.updateOne({_id: userId}, updateDoc)
+      
+      
+      return this.res.status(200).json({
+        success: true,
+        message: `Candidate updated successfully`,
+        data: {
+          userId: userId,
+          name: name,
+        },
+      });
+
+    } catch (error) {
+      console.error(error);
+      return this.res.status(500).json({
+        success: false,
+        message: 'A110: Error in updating candidate',
         error: error,
       });
     }

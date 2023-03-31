@@ -9,6 +9,10 @@ module.exports = function (app, express) {
     return new UserController().boot(req, res).addUser();
   });
 
+  router.post("/updateUser", (req, res) => {
+    return new UserController().boot(req, res).updateUser();
+  });
+
   router.get("/getUser", (req, res) => {
     return new UserController().boot(req, res).getUser();
   });
