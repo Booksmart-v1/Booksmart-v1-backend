@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const Controller = require('../../Base/Controller');
-const FrequentUtility = require('../../../services/Frequent');
+const mongoose = require("mongoose");
+const Controller = require("../../Base/Controller");
+const FrequentUtility = require("../../../services/Frequent");
 const frequentUtility = new FrequentUtility();
-const user = mongoose.model('user');
-const wishlist = mongoose.model('wishlist');
-const StreamChat = require('stream-chat').StreamChat;
-const { generateOTP, fast2sms } = require('../../../../utils/otp.util');
-const e = require('connect-timeout');
-require('dotenv').config();
+const user = mongoose.model("user");
+const wishlist = mongoose.model("wishlist");
+const StreamChat = require("stream-chat").StreamChat;
+const { generateOTP, fast2sms } = require("../../../../utils/otp.util");
+const e = require("connect-timeout");
+require("dotenv").config();
 
 class UsersController extends Controller {
   async addUser() {
@@ -29,7 +29,7 @@ class UsersController extends Controller {
       if (phoneExist) {
         return this.res.status(400).json({
           success: false,
-          message: 'Phone Number already exists. Please Sign in.',
+          message: "Phone Number already exists. Please Sign in.",
         });
       }
 
@@ -72,7 +72,7 @@ class UsersController extends Controller {
       } else {
         return this.res.status(400).json({
           success: false,
-          message: 'Invalid Mobile Number',
+          message: "Invalid Mobile Number",
         });
       }
       // return this.res.status(200).json({
@@ -86,7 +86,7 @@ class UsersController extends Controller {
       console.error(error);
       return this.res.status(500).json({
         success: false,
-        message: 'A110: Error in adding candidate',
+        message: "A110: Error in adding candidate",
         error: error,
       });
     }
@@ -134,17 +134,24 @@ class UsersController extends Controller {
 
   async getUser() {
     try {
-      const candidates = await user.find({});
+      const { id } = this.req.query;
+      if (id === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Requested id is undefined",
+        });
+      }
+      const candidates = await user.find({ _id: id });
       return this.res.status(200).json({
         success: true,
-        message: 'Candidates fetched successfully',
-        data: candidates,
+        message: "Candidates fetched successfully",
+        data: candidates[0],
       });
     } catch (error) {
       console.error(error);
       return this.res.status(500).json({
         success: false,
-        message: 'A110: Error in fetching candidates',
+        message: "A110: Error in fetching candidates",
         error: error,
       });
     }
@@ -156,14 +163,14 @@ class UsersController extends Controller {
       const candidate = await user.findOne({ _id: userId });
       return this.res.status(200).json({
         success: true,
-        message: 'Candidates fetched successfully',
+        message: "Candidates fetched successfully",
         data: candidate,
       });
     } catch (error) {
       console.error(error);
       return this.res.status(500).json({
         success: false,
-        message: 'A110: Error in fetching candidate',
+        message: "A110: Error in fetching candidate",
         error: error,
       });
     }
@@ -178,10 +185,10 @@ class UsersController extends Controller {
       if (!user1) {
         return this.res.status(400).json({
           success: false,
-          message: 'Phone Number does not exist. Please Sign up',
+          message: "Phone Number does not exist. Please Sign up",
         });
       }
-      console.log('mobile', user1.mobile.length);
+      console.log("mobile", user1.mobile.length);
 
       // if (user1.mobile.length != 10) {
       //   return this.res.status(400).json({
@@ -194,7 +201,7 @@ class UsersController extends Controller {
         await user1.deleteOne();
         return this.res.status(400).json({
           success: false,
-          message: 'User is not verified. Please Sign Up',
+          message: "User is not verified. Please Sign Up",
         });
       }
 
@@ -230,19 +237,19 @@ class UsersController extends Controller {
       } else if (text.length === 0) {
         return this.res.status(400).json({
           success: false,
-          message: 'Please enter atleast one digit in mobile number',
+          message: "Please enter atleast one digit in mobile number",
         });
       } else {
         return this.res.status(400).json({
           success: false,
-          message: 'Invalid Mobile Number',
+          message: "Invalid Mobile Number",
         });
       }
     } catch (error) {
       console.error(error);
       return this.res.status(500).json({
         success: false,
-        message: 'A110: Error in adding candidate',
+        message: "A110: Error in adding candidate",
         error: error,
       });
     }
@@ -255,18 +262,18 @@ class UsersController extends Controller {
     if (!user1) {
       return this.res.status(400).json({
         success: false,
-        message: 'User does not exist',
+        message: "User does not exist",
       });
     }
 
     console.log(user1);
     if (user1.phoneOtp === otp) {
-      user1.phoneOtp = '';
+      user1.phoneOtp = "";
       user1.isAccountVerified = true;
       await user1.save();
       const serverClient = StreamChat.getInstance(
-        'unc9a4tjee5z',
-        'qn9tf23rsvd2sfh35e5nvfp3uzag44q6zaqvrvksrgvaj6x82mbvmapycvq779gt'
+        "unc9a4tjee5z",
+        "qn9tf23rsvd2sfh35e5nvfp3uzag44q6zaqvrvksrgvaj6x82mbvmapycvq779gt"
       );
       const token = serverClient.createToken(user1.name);
       return this.res.status(200).json({
@@ -282,12 +289,12 @@ class UsersController extends Controller {
     } else {
       return this.res.status(400).json({
         success: false,
-        message: 'OTP does not match',
+        message: "OTP does not match",
       });
     }
   }
 
-  async verifyAndPrepareUserId(initial = 'CAN') {
+  async verifyAndPrepareUserId(initial = "CAN") {
     let newId = await frequentUtility.generateNumber(6);
     let isUnique = false;
     while (!isUnique) {

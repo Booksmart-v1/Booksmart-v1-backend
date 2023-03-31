@@ -5,7 +5,7 @@ const Controller = require("../../Base/Controller");
 const FrequentUtility = require("../../../services/Frequent");
 const frequentUtility = new FrequentUtility();
 const bookAd = mongoose.model("bookAds");
-const user = mongoose.model('user');
+const user = mongoose.model("user");
 // const StreamChat = require("stream-chat").StreamChat;
 const e = require("connect-timeout");
 const aws = require("aws-sdk");
@@ -250,29 +250,37 @@ class BookAdsController extends Controller {
       let updateDoc = {
         $set: {
           sold: true,
-          buyerId: buyerId===undefined?"unknown":buyerId
+          buyerId: buyerId === undefined ? "unknown" : buyerId,
         },
       };
+
+      const ba = await bookAd.find({ _id: id });
+
       const result = await bookAd.updateOne({ _id: id }, updateDoc);
-      const seller = await user.findOne({_id:result.sellerId})
-      let bs = seller.booksSold
-      bs.push(result._id)
+      const seller = await user.find({ _id: ba[0].sellerId });
+
+      let bs = seller[0].booksSold;
+
+      bs.push(ba[0]._id);
+      console.log(bs);
       updateDoc = {
         $set: {
-          booksSold: bs
-        }
+          booksSold: bs,
+        },
+      };
+      if (!seller[0].booksSold.includes(ba[0]._id)) {
+        const r1 = await user.updateOne({ _id: ba[0].sellerId }, updateDoc);
       }
-      const r1 = await user.updateOne({_id:result.sellerId}, updateDoc)
-      if(buyerId!==undefined){
-        const buyer = await user.findOne({_id:buyerId})
-        let bb = seller.booksBought
-        bb.push(result._id)
+      if (buyerId !== undefined) {
+        const buyer = await user.findOne({ _id: buyerId });
+        let bb = seller.booksBought;
+        bb.push(ba[0]._id);
         updateDoc = {
           $set: {
-            booksBought: bb
-          }
-        }
-        const r2 = await user.updateOne({_id:buyerId}, updateDoc)
+            booksBought: bb,
+          },
+        };
+        const r2 = await user.updateOne({ _id: buyerId }, updateDoc);
       }
       return this.res.status(200).json({
         success: true,
@@ -301,29 +309,35 @@ class BookAdsController extends Controller {
       let updateDoc = {
         $set: {
           sold: false,
-          buyerId: undefined
+          buyerId: undefined,
         },
       };
+      const mu = await bookAd.find({ _id: id });
+      console.log(id);
+      console.log(mu);
       const result = await bookAd.updateOne({ _id: id }, updateDoc);
-      const seller = await user.findOne({_id:result.sellerId})
-      let bs = seller.booksSold
-      bs = bs.splice(bs.indexOf(result._id),1)
+      const seller = await user.find({ _id: mu[0].sellerId });
+      console.log(seller);
+      console.log(mu[0]);
+      console.log(result);
+      let bs = seller[0].booksSold;
+      bs = bs.slice(mu[0]._id, 1);
       updateDoc = {
         $set: {
-          booksSold: bs
-        }
-      }
-      const r1 = await user.updateOne({_id:result.sellerId}, updateDoc)
-      if(buyerId!==undefined){
-        const buyer = await user.findOne({_id:buyerId})
-        let bb = seller.booksBought
-        bb = bb.splice(bb.indexOf(result._id),1)
+          booksSold: bs,
+        },
+      };
+      const r1 = await user.updateOne({ _id: mu[0].sellerId }, updateDoc);
+      if (buyerId !== undefined) {
+        const buyer = await user.findOne({ _id: buyerId });
+        let bb = seller.booksBought;
+        bb = bb.slice(mu[0]._id, 1);
         updateDoc = {
           $set: {
-            booksBought: bb
-          }
-        }
-        const r2 = await user.updateOne({_id:buyerId}, updateDoc)
+            booksBought: bb,
+          },
+        };
+        const r2 = await user.updateOne({ _id: buyerId }, updateDoc);
       }
       return this.res.status(200).json({
         success: true,

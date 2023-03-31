@@ -9,6 +9,7 @@ const chatRoomSchema = new mongoose.Schema({
   userIds: Array,
   chatInitiator: String,
   bookAdId: String,
+  closed: { type: Boolean, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
