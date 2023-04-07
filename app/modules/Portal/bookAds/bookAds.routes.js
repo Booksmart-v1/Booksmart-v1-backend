@@ -33,7 +33,9 @@ module.exports = function (app, express) {
   router.post("/deleteAd", (req, res) => {
     return new BookAdsController().boot(req, res).deleteAd();
   });
-
+  router.get("/getBookAd", (req, res) => {
+    return new BookAdsController().boot(req, res).getBookAd();
+  });
   //   router.post("/loginUser", (req, res) => {
   //     return new UserController().boot(req, res).loginUser();
   //   });

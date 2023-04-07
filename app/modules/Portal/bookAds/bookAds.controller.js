@@ -147,31 +147,34 @@ class BookAdsController extends Controller {
         sellerAddress,
         sellerPincode,
       } = this.req.body;
-      if (
-        bookAdId===undefined
-      ) {
+      if (bookAdId === undefined) {
         console.log(bookId);
         return this.res.status(400).json({
           success: false,
           message: "Please fill the id field",
         });
       }
-      if (sellerPincode!==undefined && sellerPincode.length !== 6) {
+      if (sellerPincode !== undefined && sellerPincode.length !== 6) {
         return this.res.status(400).json({
           success: false,
           message: "Please enter valid pincode",
         });
       }
       console.log(bookAdId);
-      let updateDoc = { $set: {} }
-      if(bookPrice!==undefined) updateDoc.$set.bookPrice = bookPrice
-      if(bookImageUrl!==undefined) updateDoc.$set.bookImageUrl = bookImageUrl
-      if(bookDescription!==undefined) updateDoc.$set.bookDescription = bookDescription
-      if(bookCondition!==undefined) updateDoc.$set.bookCondition = bookCondition
-      if(sellerAddress!==undefined) updateDoc.$set.sellerAddress = sellerAddress
-      if(sellerPincode!==undefined) updateDoc.$set.sellerPincode = sellerPincode
-      
-      const updateBookAd = await bookAd.updateOne({_id: bookAdId}, updateDoc);
+      let updateDoc = { $set: {} };
+      if (bookPrice !== undefined) updateDoc.$set.bookPrice = bookPrice;
+      if (bookImageUrl !== undefined)
+        updateDoc.$set.bookImageUrl = bookImageUrl;
+      if (bookDescription !== undefined)
+        updateDoc.$set.bookDescription = bookDescription;
+      if (bookCondition !== undefined)
+        updateDoc.$set.bookCondition = bookCondition;
+      if (sellerAddress !== undefined)
+        updateDoc.$set.sellerAddress = sellerAddress;
+      if (sellerPincode !== undefined)
+        updateDoc.$set.sellerPincode = sellerPincode;
+
+      const updateBookAd = await bookAd.updateOne({ _id: bookAdId }, updateDoc);
       return this.res.status(200).json({
         success: true,
         message: `Book Ad updated successfully`,
@@ -374,6 +377,31 @@ class BookAdsController extends Controller {
       return this.res.status(500).json({
         success: false,
         message: "Something went wrong",
+      });
+    }
+  }
+
+  async getBookAd() {
+    try {
+      const { id } = this.req.query;
+      if (id === undefined) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Requested id is undefined",
+        });
+      }
+      const data = await bookAd.find({ _id: id });
+      return this.res.status(200).json({
+        success: true,
+        message: "Book ad found successfully",
+        data: data[0],
+      });
+    } catch (error) {
+      console.error(error);
+      return this.res.status(500).json({
+        success: false,
+        message: "A110: Error in fetching candidates",
+        error: error,
       });
     }
   }
