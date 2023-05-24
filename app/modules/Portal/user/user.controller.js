@@ -16,10 +16,10 @@ class UsersController extends Controller {
 
       let { mobile, name, email, profilePicUrl } = this.req.body;
 
-      if( mobile === undefined || name === undefined) {
+      if (mobile === undefined || name === undefined) {
         return this.res.status(400).json({
           success: false,
-          message: 'Mobile and name fields are required.',
+          message: "Mobile and name fields are required.",
         });
       }
 
@@ -96,23 +96,26 @@ class UsersController extends Controller {
     try {
       let newCandidate = this.req.body;
 
-      let { userId, name, email, profilePicUrl } = this.req.body;
+      let { userId, name, email, profilePicUrl, story, status } = this.req.body;
 
-      if( userId === undefined ) {
+      if (userId === undefined) {
         return this.res.status(400).json({
           success: false,
-          message: 'userId field is required.',
+          message: "userId field is required.",
         });
       }
 
-      let updateDoc = { $set: {} }
-      if(name!==undefined) updateDoc.$set.name = name
-      if(email!==undefined) updateDoc.$set.email = email
-      if(profilePicUrl!==undefined) updateDoc.$set.profilePicUrl = profilePicUrl
+      let updateDoc = { $set: {} };
+      if (name !== undefined) updateDoc.$set.name = name;
+      if (email !== undefined) updateDoc.$set.email = email;
+      if (profilePicUrl !== undefined)
+        updateDoc.$set.profilePicUrl = profilePicUrl;
 
-      const updateUser = await user.updateOne({_id: userId}, updateDoc)
-      
-      
+      if (story !== undefined) updateDoc.$set.story = story;
+      if (status !== undefined) updateDoc.$set.status = status;
+
+      const updateUser = await user.updateOne({ _id: userId }, updateDoc);
+
       return this.res.status(200).json({
         success: true,
         message: `Candidate updated successfully`,
@@ -121,12 +124,11 @@ class UsersController extends Controller {
           name: name,
         },
       });
-
     } catch (error) {
       console.error(error);
       return this.res.status(500).json({
         success: false,
-        message: 'A110: Error in updating candidate',
+        message: "A110: Error in updating candidate",
         error: error,
       });
     }

@@ -151,6 +151,7 @@ class ChatRoomController extends Controller {
         },
       };
       const res = await ChatRoomUtil.updateOne({ _id: chatRoomId }, updateDoc);
+      const res1 = await ChatRoomUtil.deleteOne({ _id: chatRoomId }, updateDoc);
       return this.res.status(200).json({
         success: true,
         message: "Successfully closed chat",

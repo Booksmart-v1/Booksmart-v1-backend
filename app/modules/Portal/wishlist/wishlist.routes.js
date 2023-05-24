@@ -10,6 +10,9 @@ module.exports = function (app, express) {
   router.get("/getWishlist", (req, res) => {
     return new wishlistController().boot(req, res).getWishlist();
   });
+  router.get("/searchWishlist", (req, res) => {
+    return new wishlistController().boot(req, res).searchWishlist();
+  });
 
   app.use(config, router);
 };
