@@ -2,17 +2,18 @@ const jwt = require("jsonwebtoken");
 // models
 const mongoose = require("mongoose");
 
-const userBody = mongoose.model("user");
+const userUtil = mongoose.model("user");
 
-const SECRET_KEY = "password234";
+const SECRET_KEY = process.env.JWTSECRET | "qpalzmwoskxn";
 
-const encode = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
-    const { mobile } = req.body;
-    const user = await userBody.findOne({ mobile: mobile });
+    const { userId } = req.body;
+    const user = await userUtil.findOne({ _id: userId });
     const payload = {
       userId: user._id,
-      mobile: mobile,
+      userName: user.name, 
+      mobile: user.mobile,
     };
     const authToken = jwt.sign(payload, SECRET_KEY);
     console.log("Auth", authToken);
@@ -23,20 +24,20 @@ const encode = async (req, res, next) => {
   }
 };
 
-const decode = (req, res, next) => {
+const deAuthenticate = (req, res, next) => {
   if (!req.headers["authorization"]) {
     return res
-      .status(400)
-      .json({ success: false, message: "No access token provided" });
+      .status(401)
+      .json({ success: false, message: "No auth token providied in authorization" });
   }
   const accessToken = req.headers.authorization.split(" ")[1];
   try {
     const decoded = jwt.verify(accessToken, SECRET_KEY);
     req.userId = decoded.userId;
-    req.userType = decoded.type;
+    req.userName = decoded.userName;
     return next();
   } catch (error) {
     return res.status(401).json({ success: false, message: error.message });
   }
 };
-module.exports = { encode: encode, docode: decode };
+module.exports = { en: authenticate, de: deAuthenticate };

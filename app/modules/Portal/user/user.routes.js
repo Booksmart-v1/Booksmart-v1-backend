@@ -1,4 +1,4 @@
-const { encode } = require("../../../middlewares/jwt");
+const { en, de } = require("../../../middlewares/auth");
 
 const UserController = require("./user.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
@@ -9,23 +9,23 @@ module.exports = function (app, express) {
     return new UserController().boot(req, res).addUser();
   });
 
-  router.post("/updateUser", (req, res) => {
+  router.post("/updateUser", de, (req, res) => {
     return new UserController().boot(req, res).updateUser();
   });
 
-  router.get("/getUser", (req, res) => {
+  router.get("/getUser", de, (req, res) => {
     return new UserController().boot(req, res).getUser();
   });
 
-  router.get('/getOneUser', (req, res) => {
+  router.get('/getOneUser', de, (req, res) => {
     return new UserController().boot(req, res).getOneUser();
   });
 
-  router.post("/loginUser", encode, (req, res, next) => {
+  router.post("/loginUser", (req, res) => {
     return new UserController().boot(req, res).loginUser();
   });
 
-  router.post("/verifyUser", (req, res) => {
+  router.post("/verifyUser", en, (req, res) => {
     return new UserController().boot(req, res).verifyUser();
   });
 
