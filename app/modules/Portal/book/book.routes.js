@@ -7,10 +7,10 @@ module.exports = function (app, express) {
     return new BookController().boot(req, res).addBooks();
   });
 
-  router.get("/getBook", (req, res) => {
+  router.get("/getBook", de, (req, res) => {
     return new BookController().boot(req, res).getBook();
   });
-  router.get("/getBooks", (req, res) => {
+  router.get("/getBooks", de, (req, res) => {
     return new BookController().boot(req, res).getBooks();
   });
 

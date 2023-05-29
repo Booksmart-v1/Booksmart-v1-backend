@@ -7,10 +7,10 @@ module.exports = function (app, express) {
   //   return new NotificationsController().boot(req, res).getUserNotifs();
   // });
 
-  router.get("/getUserNotifs", (req, res) => {
+  router.get("/getUserNotifs",de, (req, res) => {
     return new NotificationsController().boot(req, res).getUserNotifs();
   });
-  router.post("/sendNotif", (req, res) => {
+  router.post("/sendNotif",de, (req, res) => {
     return new NotificationsController().boot(req, res).sendNotif();
   });
   router.post("/broadcastNotif", (req, res) => {

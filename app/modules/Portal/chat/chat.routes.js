@@ -3,7 +3,7 @@ const config = require("../../../../configs/configs").portal.baseApiUrl;
 module.exports = function (app, express) {
   const router = express.Router();
 
-  router.post("/addChannel", (req, res) => {
+  router.post("/addChannel",de, (req, res) => {
     return new ChatsController().boot(req, res).addChannel();
   });
 

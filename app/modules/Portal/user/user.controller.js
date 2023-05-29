@@ -83,6 +83,7 @@ class UsersController extends Controller {
       //   },
       // });
     } catch (error) {
+      const result = await user.deleteOne({ _id: user1._id });
       console.error(error);
       return this.res.status(500).json({
         success: false,
@@ -269,15 +270,12 @@ class UsersController extends Controller {
     }
 
     console.log(user1);
+    console.log("what");
     if (user1.phoneOtp === otp) {
       user1.phoneOtp = "";
       user1.isAccountVerified = true;
       await user1.save();
-      const serverClient = StreamChat.getInstance(
-        "unc9a4tjee5z",
-        "qn9tf23rsvd2sfh35e5nvfp3uzag44q6zaqvrvksrgvaj6x82mbvmapycvq779gt"
-      );
-      const token = serverClient.createToken(user1.name);
+
       return this.res.status(200).json({
         success: true,
         message: `Welcome back ${user1.name} !`,
@@ -285,7 +283,7 @@ class UsersController extends Controller {
           userId: user1._id,
           name: user1.name,
           email: user1.email,
-          token: token,
+          authToken: this.req.authToken,
         },
       });
     } else {

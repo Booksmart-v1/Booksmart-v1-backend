@@ -9,7 +9,7 @@ const wishlistSchema = new schema({
       required: true,
     },
   ],
-  bookName: { type: String, required: true },
+  bookName: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
