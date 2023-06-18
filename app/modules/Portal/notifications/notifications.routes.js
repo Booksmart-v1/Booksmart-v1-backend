@@ -1,5 +1,6 @@
 const NotificationsController = require("./notifications.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
+const { en, de, newToken } = require("../../../middlewares/auth");
 module.exports = function (app, express) {
   const router = express.Router();
 
@@ -16,13 +17,13 @@ module.exports = function (app, express) {
   router.post("/broadcastNotif", (req, res) => {
     return new NotificationsController().boot(req, res).broadcastNotif();
   });
-  router.post("/readNotif", (req, res) => {
+  router.post("/readNotif", de, (req, res) => {
     return new NotificationsController().boot(req, res).readNotif();
   });
-  router.post("/removeNotif", (req, res) => {
+  router.post("/removeNotif", de, (req, res) => {
     return new NotificationsController().boot(req, res).removeNotif();
   });
-  router.post("/removeInterestNotification", (req, res) => {
+  router.post("/removeInterestNotification", de, (req, res) => {
     return new NotificationsController()
       .boot(req, res)
       .removeInterestNotification();

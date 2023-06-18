@@ -1,39 +1,40 @@
 const BookAdsController = require("./bookAds.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
+const { en, de, newToken } = require("../../../middlewares/auth");
 module.exports = function (app, express) {
   const router = express.Router();
 
-  router.post("/addBookAds", (req, res) => {
+  router.post("/addBookAds", de, (req, res) => {
     return new BookAdsController().boot(req, res).addBookAds();
   });
 
-  router.post("/updateBookAds", (req, res) => {
+  router.post("/updateBookAds", de, (req, res) => {
     return new BookAdsController().boot(req, res).updateBookAds();
   });
 
-  router.get("/getBookAds", (req, res) => {
+  router.get("/getBookAds", de, (req, res) => {
     return new BookAdsController().boot(req, res).getBookAds();
   });
-  router.get("/getMyBookAds", (req, res) => {
+  router.get("/getMyBookAds", de, (req, res) => {
     return new BookAdsController().boot(req, res).getMyBookAds();
   });
 
-  router.post("/uploadImageS3", (req, res) => {
+  router.post("/uploadImageS3", de, (req, res) => {
     return new BookAdsController().boot(req, res).uploadImageS3();
   });
 
-  router.post("/markAsSold", (req, res) => {
+  router.post("/markAsSold", de, (req, res) => {
     return new BookAdsController().boot(req, res).markAsSold();
   });
 
-  router.post("/markAsUnsold", (req, res) => {
+  router.post("/markAsUnsold", de, (req, res) => {
     return new BookAdsController().boot(req, res).markAsUnsold();
   });
 
-  router.post("/deleteAd", (req, res) => {
+  router.post("/deleteAd", de, (req, res) => {
     return new BookAdsController().boot(req, res).deleteAd();
   });
-  router.get("/getBookAd", (req, res) => {
+  router.get("/getBookAd", de, (req, res) => {
     return new BookAdsController().boot(req, res).getBookAd();
   });
   //   router.post("/loginUser", (req, res) => {

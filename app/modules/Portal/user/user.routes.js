@@ -1,4 +1,4 @@
-const { en, de } = require("../../../middlewares/auth");
+const { en, de, newToken } = require("../../../middlewares/auth");
 
 const UserController = require("./user.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
@@ -22,6 +22,10 @@ module.exports = function (app, express) {
   });
 
   router.post("/loginUser", (req, res) => {
+    return new UserController().boot(req, res).loginUser();
+  });
+
+  router.post("/refreshUser", newToken, (req, res) => {
     return new UserController().boot(req, res).loginUser();
   });
 

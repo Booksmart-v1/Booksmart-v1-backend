@@ -1,5 +1,6 @@
 const chatMessageSchema = require("./ChatMessage.controller");
 const config = require("../../../../configs/configs").portal.baseApiUrl;
+const { en, de, newToken } = require("../../../middlewares/auth");
 module.exports = function (app, express) {
   const router = express.Router();
 

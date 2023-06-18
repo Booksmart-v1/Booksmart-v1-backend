@@ -284,12 +284,38 @@ class UsersController extends Controller {
           name: user1.name,
           email: user1.email,
           authToken: this.req.authToken,
+          refreshToken: this.req.refreshToken,
         },
       });
     } else {
       return this.res.status(400).json({
         success: false,
         message: "OTP does not match",
+      });
+    }
+  }
+
+  async refreshUser() {
+    try {
+      if (!this.req.token) {
+        return this.res.status(400).json({
+          success: false,
+          message: "Token not found",
+        });
+      }
+      return this.res.status(200).json({
+        success: true,
+        message: "Token refreshed successfully",
+        data: {
+          token: this.req.token,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      return this.res.status(500).json({
+        success: false,
+        message: "A110: Error in refreshing token",
+        error: error,
       });
     }
   }
