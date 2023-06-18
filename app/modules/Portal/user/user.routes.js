@@ -17,7 +17,7 @@ module.exports = function (app, express) {
     return new UserController().boot(req, res).getUser();
   });
 
-  router.get('/getOneUser', de, (req, res) => {
+  router.get("/getOneUser", de, (req, res) => {
     return new UserController().boot(req, res).getOneUser();
   });
 
@@ -26,7 +26,7 @@ module.exports = function (app, express) {
   });
 
   router.post("/refreshUser", newToken, (req, res) => {
-    return new UserController().boot(req, res).loginUser();
+    return new UserController().boot(req, res).refreshUser();
   });
 
   router.post("/verifyUser", en, (req, res) => {

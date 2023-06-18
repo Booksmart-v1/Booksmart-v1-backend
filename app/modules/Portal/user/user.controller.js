@@ -268,11 +268,12 @@ class UsersController extends Controller {
         message: "User does not exist",
       });
     }
-
+    console.log(this.req.authToken);
+    console.log(this.req.refreshToken);
     console.log(user1);
-    console.log("what");
     if (user1.phoneOtp === otp) {
       user1.phoneOtp = "";
+
       user1.isAccountVerified = true;
       await user1.save();
 

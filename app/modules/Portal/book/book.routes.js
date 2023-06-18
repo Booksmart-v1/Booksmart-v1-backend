@@ -1,4 +1,6 @@
 const BookController = require("./book.controller");
+const { en, de, newToken } = require("../../../middlewares/auth");
+
 const config = require("../../../../configs/configs").portal.baseApiUrl;
 module.exports = function (app, express) {
   const router = express.Router();

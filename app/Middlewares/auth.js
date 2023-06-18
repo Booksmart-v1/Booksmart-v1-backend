@@ -8,7 +8,7 @@ const SECRET_KEY = process.env.JWTSECRET
   ? process.env.JWTSECRET
   : "qpalzmwoskxn";
 
-const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY 
+const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY
   ? process.env.REFRESH_SECRET_KEY
   : "mznxbclaksjdhf";
 
@@ -22,10 +22,14 @@ const authenticate = async (req, res, next) => {
       mobile: user.mobile,
     };
     console.log(SECRET_KEY);
-    const authToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    const authToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "1m" });
     console.log("Auth", authToken);
     req.authToken = authToken;
-    req.refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: "5d" });
+
+    req.refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+      expiresIn: "5d",
+    });
+    console.log(req.refreshToken);
     next();
   } catch (error) {
     console.log(error);
@@ -61,8 +65,15 @@ const newToken = (req, res, next) => {
   }
   const refreshToken = req.headers.authorization.split(" ")[1];
   try {
-    const decoded = jwt.verify(accessToken, REFRESH_SECRET_KEY);
-    req.token = jwt.sign( decoded, SECRET_KEY, { expiresIn: "1h" });
+    const decoded = jwt.verify(refreshToken, REFRESH_SECRET_KEY);
+    console.log(decoded);
+    const payload = {
+      userId: decoded.userId,
+      userName: decoded.userName,
+      mobile: decoded.mobile,
+    };
+    req.token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    console.log(req.token);
     return next();
   } catch (error) {
     return res.status(401).json({ success: false, message: error.message });
